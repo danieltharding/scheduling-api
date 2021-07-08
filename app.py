@@ -10,10 +10,10 @@ dics = {}
 indices = {}
 pot_edges = {}
 names = []
-api = Flask(__name__)
+app = Flask(__name__)
 
 
-@api.route('/', methods=["POST", "GET"])
+@app.route('/', methods=["POST", "GET"])
 def get_graph():
     json = request.get_json(force=True)
     name = json.get("name", "")
@@ -38,7 +38,7 @@ def new_graph(name):
     pot_edges[name] = {}
 
 
-@api.route('/add_vertex', methods=["POST", "GET"])
+@app.route('/add_vertex', methods=["POST", "GET"])
 def add_vertex():
     json = request.get_json(force=True)
     name = json.get("name", "")
@@ -65,7 +65,7 @@ def create_pot_edges(name):
     pot_edges[name] = hold
 
 
-@api.route("/add_edge", methods=["POST", "GET"])
+@app.route("/add_edge", methods=["POST", "GET"])
 def add_edge():
     json = request.get_json(force=True)
     vert_from = json.get("vert_from", "")
@@ -86,7 +86,7 @@ def add_edge():
     return jsonify({"success": False, "reason": "Graph doesn't exist"})
 
 
-@api.route("/next_pairs", methods=["POST", "GET"])
+@app.route("/next_pairs", methods=["POST", "GET"])
 def next_pairs():
     json = request.get_json(force=True)
     name = json.get("name", "")
@@ -208,15 +208,15 @@ def topological(name):
     return re
 
 
-@api.route("/get_spreadsheet", methods=["GET", "POST"])
+@app.route("/get_spreadsheet", methods=["GET", "POST"])
 def get_spreadsheet():
     json = request.get_json(force=True)
     name = json.get("name", "")
     if name not in graphs.keys():
         return jsonify({"success": False, "reason": "graph doesn't exist"})
     make_spreadsheet(name)
-    return api.send_static_file("{}.xlsx".format(name))
+    return app.send_static_file("{}.xlsx".format(name))
 
 
 if __name__ == "__main__":
-    api.run()
+    app.run()
