@@ -43,8 +43,10 @@ def add_vertex():
     json = request.get_json(force=True)
     name = json.get("name", "")
     new_vertex = json.get("vertex_name", "")
-    if new_vertex in lists[name] or new_vertex == "":
-        return jsonify({'success': False})
+    if new_vertex in lists[name]:
+        return jsonify({'success': False, "reason": "Name can't be empty"})
+    if new_vertex == "":
+        return jsonify(({'success': False, "reason": "Node exists"}))
     dics[name][new_vertex] = indices[name]
     graphs[name].add_vertex(indices[name])
     indices[name] += 1
