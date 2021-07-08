@@ -1,5 +1,5 @@
 import igraph
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, url_for
 import pandas as pd
 from math import inf
 
@@ -146,11 +146,17 @@ def correct_length(dic):
 def make_spreadsheet(name):
     topo = topological(name)
     frame = get_data_frame(topo, name)
-    writer = pd.ExcelWriter('./static/{}.xlsx'.format(name), engine='xlsxwriter')
+    writer = make_file(name)
     df = pd.DataFrame(frame)
     df.to_excel(writer, sheet_name="Sheet 1", index=False)
     formulae(writer, topo, name)
+    writer.save()
     writer.close()
+
+
+def make_file(name):
+    # return pd.ExcelWriter("{}.xlsx".format(name), engine='xlsxwriter')
+    return pd.ExcelWriter(url_for('static', filename="{}.xlsx".format(name)), engine='xlsxwriter')
 
 
 def formulae(writer, sorted, name):
