@@ -155,7 +155,6 @@ def make_spreadsheet(name):
 
 
 def make_file(name):
-    # return pd.ExcelWriter("{}.xlsx".format(name), engine='xlsxwriter')
     return pd.ExcelWriter(url_for('static', filename="{}.xlsx".format(name)), engine='xlsxwriter')
 
 
@@ -209,7 +208,7 @@ def topological(name):
     return re
 
 
-@api.route("/get_spreadsheet", methods=["POST"])
+@api.route("/get_spreadsheet", methods=["GET", "POST"])
 def get_spreadsheet():
     json = request.get_json(force=True)
     name = json.get("name", "")
@@ -220,4 +219,4 @@ def get_spreadsheet():
 
 
 if __name__ == "__main__":
-    api.run(port=8000)
+    api.run()
