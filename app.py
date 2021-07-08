@@ -13,7 +13,7 @@ names = []
 api = Flask(__name__)
 
 
-@api.route('/', methods=["POST"])
+@api.route('/', methods=["POST", "GET"])
 def get_graph():
     json = request.get_json(force=True)
     name = json.get("name", "")
@@ -38,7 +38,7 @@ def new_graph(name):
     pot_edges[name] = {}
 
 
-@api.route('/add_vertex', methods=["POST"])
+@api.route('/add_vertex', methods=["POST", "GET"])
 def add_vertex():
     json = request.get_json(force=True)
     name = json.get("name", "")
@@ -65,7 +65,7 @@ def create_pot_edges(name):
     pot_edges[name] = hold
 
 
-@api.route("/add_edge", methods=["POST"])
+@api.route("/add_edge", methods=["POST", "GET"])
 def add_edge():
     json = request.get_json(force=True)
     vert_from = json.get("vert_from", "")
@@ -86,7 +86,7 @@ def add_edge():
     return jsonify({"success": False, "reason": "Graph doesn't exist"})
 
 
-@api.route("/next_pairs", methods=["POST"])
+@api.route("/next_pairs", methods=["POST", "GET"])
 def next_pairs():
     json = request.get_json(force=True)
     name = json.get("name", "")
